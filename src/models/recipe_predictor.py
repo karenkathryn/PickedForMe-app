@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def main_function(test_pos_value, test_neg_value):
-    """This is the main function."""
+    """This is the function that predicts 5 ingredients."""
     file_w2v = "src/models/model-w2v.pkl"
     file_tfidf = "src/models/model-tfidf.pkl"
     file_csm = "src/models/model-csm.pkl"
@@ -23,9 +23,43 @@ def main_function(test_pos_value, test_neg_value):
 
     result = get_model_w2v(w_pos, w_neg, model)
     my_food_1, my_food_2, my_food_3, my_food_4, my_food_5 = display_chk_boxes(result)
-    
-    
+
     return my_food_1, my_food_2, my_food_3, my_food_4, my_food_5
+
+def get_model_w2v(w1, w2, model):
+    try: 
+        return model.wv.most_similar(positive=w1, negative=w2)
+    except KeyError:
+        # To do:
+        # Case: the user entered an ingredient that is not in the BOW from corpus
+        return 'There are no recipes with this ingredient set.'
+
+
+def display_chk_boxes(result):
+    my_food_1 = result[0][0]
+    my_food_2 = result[1][0]
+    my_food_3 = result[2][0]
+    my_food_4 = result[3][0]
+    my_food_5 = result[4][0]
+    return my_food_1, my_food_2, my_food_3, my_food_4, my_food_5
+
+
+
+def main_function_2(ingredients):
+    print(ingredients)
+    return "Hello World!"
+
+ ############################
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -152,16 +186,7 @@ def get_recipes_path_try(my_food_list, df_tfidf):
                         recipe_list.append(f'https://www.food.com/recipe/{my_recipe_list[i]}')
                 return recipe_list
 
-def get_model_w2v(w1, w2, model):
-    return model.wv.most_similar(positive=w1, negative=w2)
 
-def display_chk_boxes(result):
-    my_food_1 = result[0][0]
-    my_food_2 = result[1][0]
-    my_food_3 = result[2][0]
-    my_food_4 = result[3][0]
-    my_food_5 = result[4][0]
-    return my_food_1, my_food_2, my_food_3, my_food_4, my_food_5
 
 def get_result_chk_box(result, my_food_list, df_tfidf):
     return get_recipes_path_try(my_food_list, df_tfidf)

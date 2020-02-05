@@ -5,15 +5,15 @@
     <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='bootstrap.min.css') }}">
 </head>
 <body>
-    <form> <input type="checkbox" name="love" value="love" id="food-1"><label for="love"> {{ predicted[0] }} </label> </form>
-    <form> <input type="checkbox" name="love" value="love" id="food-2"><label for="love"> {{ predicted[1] }}</label> </form>
-    <form> <input type="checkbox" name="love" value="love" id="food-3"><label for="love"> {{ predicted[2] }}</label> </form>
-    <form> <input type="checkbox" name="love" value="love" id="food-4"><label for="love"> {{ predicted[3] }}</label> </form>
-    <form> <input type="checkbox" name="love" value="love" id="food-5"><label for="love"> {{ predicted[4] }}</label> </form>
+<form action="/get_final_results" method="post">
+    {% for item in predicted %}
+        <input type="checkbox" id="id_{{item}}" name="predicted" value="{{item}}">
+        <label for="id_{{item}}">{{item[1:-1]}}</label>
+        <br/>{% endfor %}<br/><br/>
+    <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
+</form>
+    <br/><br/>
 
- <br\>
-
-<br\><br\>
-    <a href="/">Go back home</a>
+<br/> <a href="/">Go back home</a>
 </body>
 </html>

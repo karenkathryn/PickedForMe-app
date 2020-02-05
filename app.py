@@ -3,6 +3,7 @@ from waitress import serve
 from src.utils import validate_input
 from src.utils import validate_input
 from src.models.recipe_predictor import main_function
+from src.models.recipe_predictor import main_function_2
 
 app = Flask(__name__, static_url_path="/static")
 
@@ -13,7 +14,7 @@ def index():
 
 @app.route("/get_results", methods=["POST"])
 def get_results():
-    """ Predict recipes based on the inputs. """
+    """ Predict ingredients based on the inputs. """
     data = request.form
     print(data)
 
@@ -24,6 +25,20 @@ def get_results():
         return render_template("results_checkboxes.html", predicted=[my_food_1, my_food_2, my_food_3, my_food_4, my_food_5])
     else:
         return abort(400, errors)
+
+@app.route("/get_final_results", methods=["POST"])
+def get_final_results():
+    """ Predict recipes based on the inputs. """
+    selected_ingredients = request.form.getlist("predicted")
+    print(selected_ingredients)
+    if request.method == "POST":
+        predicted_final = main_function_2(selected_ingredients)
+        return render_template("results_final.html", predicted=predicted_final)
+    else:
+        return abort(400, errors)
+
+
+
 
     # if not errors:
     #     prediction = main_function(test_pos_value, test_neg_value)
