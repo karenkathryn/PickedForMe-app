@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Picked For Me</title>
+    <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Picked For Me</h1>
+        <p>
+          Some cool content will go here
+        </p>
+        <p>
+          <form action="/get_results" method="post">
+            <p>Comma separated list of foods I do like:</p>
+            <input type="text" name="w_pos" value="chocolate">
+            
+            <p>Comma separated list of foods I don't like:</p>
+            <input type="text" name="w_neg" value='"milk"'>
+            <br/><br/>
+            <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
+          </form>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
