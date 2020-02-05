@@ -128,5 +128,6 @@ dmypy.json
 
 .DS_Store
 
-.pkl
-.pickle
+# Ignore pickles
+*.pkl
+**/*.pkl
