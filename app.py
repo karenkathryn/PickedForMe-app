@@ -38,14 +38,5 @@ def get_final_results():
         return abort(400, errors)
 
 
-
-
-    # if not errors:
-    #     prediction = main_function(test_pos_value, test_neg_value)
-    #     return render_template("results.html", predicted=prediction)
-    # else:
-    #     return abort(400, errors)
-
-
 if __name__ == "__main__":
     serve(app, host='0.0.0.0', port=5000)

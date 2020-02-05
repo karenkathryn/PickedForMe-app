@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>First Flask App Results</title>
+    <title>Recipe Results!</title>
     <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='bootstrap.min.css') }}">
 </head>
 <body>
-     {{ predicted }} <br\>
-
-<br\><br\>
+    
+    {% for key,value in predicted.items() %}
+        {%  if key < 10 %}
+            <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+            <br/>
+        {% else %}
+            <p> There are no recipies with these ingredients.</p>
+        {% endif %}
+    {% endfor %}
+<br/><br/>
     <a href="/">Go back home</a>
 </body>
 </html>
