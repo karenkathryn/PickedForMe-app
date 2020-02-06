@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Picked For Me</title>
-    <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
-</head>
-
-<div class="jumbotron" style="background-image: 
-linear-gradient(to top,
-rgb(253, 219, 146) 0%,
-rgb(209, 253, 255) 100%); 
-left: -1001px; top: -1202px;">
-    <div class="container">
-        <body>
-            <h4>
-                Pick 1 or 2 ingredients that you like.
-            </h4>
-            <form action="/get_final_results" method="post">
-                {% for item in predicted %}
-                    <input type="checkbox" id="id_{{item}}" name="predicted" value="{{item}}">
-                    <label for="id_{{item}}">{{item[1:-1]}}</label>
-                    <br/>{% endfor %}<br/><br/>
-                <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
-            </form>
-            <br/><br/>
-            <a href="/">Go back home</a>
-        </body>
-    </div>
-</div>
+<html>
+    <head>
+        <title>Picked For Me</title>
+        <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
+        <link rel="stylesheet" media="screen" href="/static/styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron" style="background: transparent">
+                <div class="container">  
+                    <p>
+                        Pick 1 or 2 ingredients that you like.
+                    </p>
+                    <form action="/get_final_results" method="post">
+                        {% for item in predicted %}
+                            <input type="checkbox" id="id_{{item}}" name="predicted" value="{{item}}">
+                            <label for="id_{{item}}">{{item[1:-1]}}</label>
+                            <br/>
+                        {% endfor %}
+                        <br/><br/>
+                
+                        <input type="submit" class="btn-lg" value="Predict!">
+                        <br />
+                    </form>       
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
