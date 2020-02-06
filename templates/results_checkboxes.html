@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>First Flask App Results</title>
-    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <title>Picked For Me</title>
+    <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
 </head>
-<body>
-<form action="/get_final_results" method="post">
-    {% for item in predicted %}
-        <input type="checkbox" id="id_{{item}}" name="predicted" value="{{item}}">
-        <label for="id_{{item}}">{{item[1:-1]}}</label>
-        <br/>{% endfor %}<br/><br/>
-    <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
-</form>
-    <br/><br/>
 
-<br/> <a href="/">Go back home</a>
-</body>
+<div class="jumbotron">
+    <div class="container">
+        <body>
+            <h4>
+                Pick 1 or 2 ingredients that you like.
+            </h4>
+            <form action="/get_final_results" method="post">
+                {% for item in predicted %}
+                    <input type="checkbox" id="id_{{item}}" name="predicted" value="{{item}}">
+                    <label for="id_{{item}}">{{item[1:-1]}}</label>
+                    <br/>{% endfor %}<br/><br/>
+                <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
+            </form>
+            <br/><br/>
+            <a href="/">Go back home</a>
+        </body>
+    </div>
+</div>
 </html>

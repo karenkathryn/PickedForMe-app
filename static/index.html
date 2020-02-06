@@ -4,19 +4,21 @@
     <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
   </head>
   <body>
-    <div class="jumbotron">
+    <div class="jumbotron text-center">
       <div class="container">
         <h1 class="display-3">Picked For Me</h1>
         <p>
-          Some cool content will go here
+          Like chocolate and bacon but hate kale? What about seafood? Does cooking 
+          the same recipes with the same ingredients over and over have you frustrated? 
+          <b>Find new recipes with this app!</b>
         </p>
         <p>
           <form action="/get_results" method="post">
-            <p>Comma separated list of foods I do like:</p>
-            <input type="text" name="w_pos" value="cod, squash">
-            
-            <p>Comma separated list of foods I don't like:</p>
-            <input type="text" name="w_neg" value="beef">
+            <p>Enter 1-2 foods you like:</p>
+            <input type="text" name="w_pos" value="bacon, peanut butter">
+            <br/><br/>
+            <p>Enter 1-2 foods you don't like:</p>
+            <input type="text" name="w_neg" value="sweet potatoes">
             <br/><br/>
             <input type="submit" class="btn btn-primary btn-lg" value="Predict!">
           </form>
