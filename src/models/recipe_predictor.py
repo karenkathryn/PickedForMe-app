@@ -1,4 +1,4 @@
-import pickle as pk
+import pickle
 import sklearn.metrics
 import pandas as pd
 
@@ -6,12 +6,11 @@ import pandas as pd
 def main_function(test_pos_value, test_neg_value):
     """This is the function that predicts 5 ingredients."""
     file_w2v = "src/models/model-w2v.pkl"
-    infile = open(file_w2v,'rb')
-    model = pk.load(infile)
+    model = load_model(file_w2v)
     #infile.close()
     
-    # file_csm = "src/models/model-csm.pkl"
-    # df_similarity = load_model(file_csm)
+    file_csm = "src/models/model-csm.pkl"
+    df_similarity = load_model(file_csm)
 
     w_pos = []
     for item in test_pos_value[0].split(", "):
@@ -25,55 +24,96 @@ def main_function(test_pos_value, test_neg_value):
 
     return my_food_1, my_food_2, my_food_3, my_food_4, my_food_5
 
+
 def main_function_2(my_food_list):
-    """This is the function that predicts 5 or less recipes."""
-    choice = len(my_food_list)
-    print(choice)
+    """This is the function that predicts 5 or less recipes. The function
+    returns a dictionary of 5 recipes or a dictionary with a text statement."""
+    # Load the models
     file_tfidf = "src/models/model-tfidf.pkl"
-    infile = open(file_tfidf,'rb')
-    df_tfidf = pk.load(infile)
-    #infile.close()
+    df_tfidf = load_model(file_tfidf)
 
+    choice = len(my_food_list)
 
+    # USER -- Choose 1 result
     if choice == 1:    
-        # USER -- Choose 1 result
         my_recipe_list = df_tfidf[(df_tfidf[my_food_list[0]] > 0)].index.tolist()  
         recipe_list = []
         my_range_value = length_recipe_list(my_recipe_list)
         for i in range(my_range_value):
             recipe_list.append('https://www.food.com/recipe/' + str(my_recipe_list[i]))
         recipe_dict = dict(list(enumerate(recipe_list)))
-        return recipe_dict
+        
+        sim_recipe_dict = main_function_3(my_recipe_list)
+        return '1', recipe_dict, sim_recipe_dict
 
-    elif choice == 2:
-        # USER -- Choose 2 results   
+    # USER -- Choose 2 results
+    elif choice == 2:   
         my_recipe_list = df_tfidf[(df_tfidf[my_food_list[0]] > 0) & 
                                     (df_tfidf[my_food_list[1]] > 0)
                                     ].index.tolist()  
-        print("in the elif")
         if len(my_recipe_list) > 0:
             recipe_list = []
             for item in my_recipe_list:
                 my_range_value = length_recipe_list(my_recipe_list)
                 
                 for i in range(my_range_value):
-                    recipe_list.append(f'https://www.food.com/recipe/{my_recipe_list[i]}')
+                    recipe_list.append('https://www.food.com/recipe/' + str(my_recipe_list[i]))
             recipe_dict = dict(list(enumerate(recipe_list)))
-            return recipe_dict
+            return '2a', recipe_dict, ''
         else: 
-            print("in the elif else")
-            return {100: "There are no recipies with these ingredients."}
+            # try individually
+            recipe_list = []
+            for item in my_food_list:
+                my_recipe_list = df_tfidf[df_tfidf[item] > 0].index.tolist()  
+                my_range_value = length_recipe_list(my_recipe_list)
+                for i in range(my_range_value):
+                    recipe_list.append('https://www.food.com/recipe/' + str(my_recipe_list[i]))
+            recipe_dict = dict(list(enumerate(recipe_list)))
+            return '2b', recipe_dict, 'There are no recipes with this choice of ingredients. Here are some suggestions:'
 
     else:
-        return {50: "That is not a valid option."}
+        # USER -- Choose 3+ results
+        return '3', {100: "That is not a valid option."}, ''
+
+def main_function_3(my_recipe_list):
+    """ """
+    file_csm = "src/models/model-csm.pkl"
+    df_similarity = load_model(file_csm)
+    
+    list_secondary = []
+    for id_ in my_recipe_list:
+        # use the tf-idf cosine similarity to find something similar
+        for column_id in df_similarity.columns:        
+            if df_similarity.loc[id_,  column_id] > 0:
+                value = df_similarity.loc[id_,  column_id]
+                if value not in my_recipe_list:
+                    list_secondary.append([column_id, value])
+            
+        pri_sec_values_df = pd.DataFrame(list_secondary, columns=['secondary', 'cs_value'])
+        # sort by cosine similarity value 
+        pri_sec_values_df = pri_sec_values_df.sort_values('cs_value')
+        
+        if len(pri_sec_values_df) > 4:
+            pri_sec_values_df = pri_sec_values_df.tail(5)
+        
+        recipe_list = []
+        for i in range(5):
+            sec_id = int(pri_sec_values_df.iloc[i]['secondary'])
+            recipe_list.append('https://www.food.com/recipe/' + str(sec_id))
+        print(recipe_list)
+        recipe_dict = dict(list(enumerate(recipe_list)))
+        return recipe_dict
+
+
 
 ############################################################
 # Helper functions begin below #
+############################################################
 
 def get_model_w2v(w1, w2, model):
     """This function returns a wrod2vec model of similar ingredients"""
     try: 
-        return model.wv.most_similar(positive=w1, negative=w2)
+        return model.wv.most_similar(positive=w1, negative=w2, topn=5)
     except KeyError:
         # To do:
         # Case: the user entered an ingredient that is not in the BOW from corpus
@@ -95,6 +135,14 @@ def length_recipe_list(my_recipe_list):
     return my_range_value
   else:
     return 5
+
+
+def load_model(file):
+    """ Load the models from the .pickle file """
+    model_file = open(file, "rb")
+    loaded_model = pickle.load(model_file)
+    model_file.close()
+    return loaded_model
 
  ##################################################################
 
@@ -153,11 +201,3 @@ def length_recipe_list(my_recipe_list):
         
         #     return recipe_list
 
-
-
-# def load_model(file):
-#     """ Load the models from the .pickle file """
-#     model_file = open(file, "rb")
-#     loaded_model = pickle.load(model_file)
-#     model_file.close()
-#     return loaded_model

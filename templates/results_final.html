@@ -8,18 +8,32 @@
 
 <div class="jumbotron">
     <div class="container">
-        <body>
-            
-            {% for key,value in predicted.items() %}
-                {%  if key < 10 %}
+        <body> 
+            <h3>Results!</h3>
+            {%  if predicted[0] == '3'  %}
+                <p> {{ predicted[1][100] }} </p>
+                <br/>
+            {% elif predicted[0] == '1' %}
+                <p>Here are recipes with the chosen ingredient.</p>
+                {% for key,value in predicted[1].items() %}
                     <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
                     <br/>
-                {% elif key == 50 %}
-                    <p> {{ value }}</p>
-                {% else %}
-                    <p> {{ value }} </p>    
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+                <br/>
+                <p>Here are suggestions.</p>
+                {% for key,value in predicted[2].items() %}
+                    <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+                    <br/>
+                {% endfor %}
+            {% else  %}
+                {{ predicted[2] }} 
+                <br/>
+                {% for key,value in predicted[1].items() %}
+                    <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+                    <br/>
+                {% endfor %}
+            {% endif %}
+          
             <br/><br/>
             
             
