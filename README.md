@@ -6,8 +6,8 @@ This repo uses Python 3.6.0. All python packages can be found in the `requiremen
 
 To create a new `conda` environment to use this repo, run:
 ```bash
-conda create --name pick
-conda activate pick
+conda create --name flask-env
+conda activate flask-env
 pip install -r requirements.txt
 ```
 
