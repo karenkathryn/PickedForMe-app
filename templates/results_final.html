@@ -16,20 +16,20 @@
             {% elif predicted[0] == '1' %}
                 <p>Here are recipes with the chosen ingredient.</p>
                 {% for key,value in predicted[1].items() %}
-                    <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+                    <a href="{{ value }}">{{ predicted[3][key] }}</a>  
                     <br/>
                 {% endfor %}
                 <br/>
                 <p>Here are suggestions.</p>
                 {% for key,value in predicted[2].items() %}
-                    <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+                    <a href="{{ value }}">{{ predicted[4][key] }}</a>  
                     <br/>
                 {% endfor %}
             {% else  %}
                 {{ predicted[2] }} 
                 <br/>
                 {% for key,value in predicted[1].items() %}
-                    <a href="{{ value }}">Recipe {{ key + 1 }}</a>  
+                    <a href="{{ value }}"> {{ predicted[3][key] }} </a>  
                     <br/>
                 {% endfor %}
             {% endif %}
